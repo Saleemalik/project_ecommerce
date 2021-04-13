@@ -2717,7 +2717,7 @@ ul.wmuSliderPagination {
 		padding-right: .5em;
 	}
 	.w3l_banner_nav_right_banner {
-		background-position:-70px 0px;
+		background-position:0px 0px;
 	}
 	.more {
 		margin-left: 39em;
@@ -3736,7 +3736,7 @@ ul.wmuSliderPagination {
 		margin-left: 15em;
 	}
 	.w3l_banner_nav_right_banner2 {
-		background-position: -145px 0px;
+		background-position: 0px 0px;
 	}
 	.wthree_banner_btm_pos h3 span {
 		padding-left: 7em;

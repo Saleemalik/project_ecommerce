@@ -495,6 +495,7 @@ def discount(request):
                     
             request.session['discounts'] = discounts
         else:
+            request.session['code'] = discountCode
             discounts = 0
             request.session['discounts'] = discounts 
         
@@ -600,6 +601,7 @@ def success(request):
     userId = request.user.id
     amount = request.session['amount']
     amount = ('{:.0f}'.format(float(amount)))
+    
     couponCode = request.session['code']
     # amount = int(amount)
     userId = UserPhone.objects.get(details=userId)
@@ -618,16 +620,22 @@ def success(request):
             userOrder = Orders.objects.create(userId=userId, amount=amount, address=address, shipName=shipName,
                                             pincode=pincode, transactionDetails='COD', phoneNo=altPhone, landMark=landMark)
             userOrder.save()
-            couponUsed = CouponUse.objects.create(userId=userId, couponCode=couponCode)
-            couponUsed.save()
-            
+            couponUsed = CouponUse.objects.get_or_create(userId=userId, couponCode=couponCode)
+            try:
+                couponUsed.save()
+            except AttributeError:
+                pass
         else:
             userOrder = Orders.objects.create(userId=userId, amount=amount, complete=True, address=address,
                                             shipName=shipName, transactionDetails='UPI', pincode=pincode, phoneNo=altPhone, landMark=landMark)
             userOrder.save()
 
-            couponUsed = CouponUse.objects.create(userId=userId, couponCode=couponCode)
-            couponUsed.save()
+            couponUsed = CouponUse.objects.get_or_create(userId=userId, couponCode=couponCode)
+            try:
+                couponUsed.save()
+            except AttributeError:
+                pass
+            
         for product in productIds:
             productName = product.product.productName
             qty = product.quantity
