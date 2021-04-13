@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="w3_login">
+        <div class="w3_login_module">
+            <div class="form-module">
+                <div>
+                    
+                </div>
+                <div class="form">
+                    <h2>OTP Login</h2>
+                    <form action="#" method="post">
+                        {% csrf_token %}
+                    <input type="text" id="otp" name="otp" placeholder="type the otp send in your phone">
+                    
+                    <input type="button" id="otpLog" value="Login">
+                        <br>
+                    <br><p id="mssg" class="text-center"></p>
+                    </form>
+                    <script>
+                        $('#otpLog').click(function(){
+                            
+                            var otp = $("#otp").val();
+                            
+                            var data = {
+                                'csrfmiddlewaretoken':'{{csrf_token}}',
+                                'otp': otp,
+                            }
+                            if (otp === ""){
+                                $('#mssg').html("Enter the OTP")
+                            }
+                            
+                            else{
+                                $.ajax({
+                                    url:'/otp_login/',
+                                    method : 'POST',
+                                    data : data,
+                                    type : JSON,
+                                    
+                                    success: function(data){
+                                        if (data == 'true'){
+                                        window.location.replace('/')
+                                        }
+                                        else if(data == 'false'){
+                                            
+                                        $("#mssg").html("wrong otp")
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

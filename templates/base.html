@@ -1,0 +1,283 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    
+    <title>Online fresh suprmarket</title>
+		<!-- for-mobile-apps -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="keywords" content="Grocery Store Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+		Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+				function hideURLbar(){ window.scrollTo(0,1); } </script>
+		<!-- //for-mobile-apps -->
+		<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="all" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		
+		<link rel="stylesheet" href="https://foliotek.github.io/Croppie/croppie.css">
+
+		<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all" />
+		<!-- font-awesome icons -->
+		<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css" media="all" /> 
+		<!-- //font-awesome icons -->
+		<!-- js -->
+		<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+		<!-- //js -->
+		<link href='//fonts.googleapis.com/css?family=Ubuntu:400,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
+		<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+		<!-- start-smoth-scrolling -->
+		<script type="text/javascript" src="{% static 'js/move-top.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/easing.js' %}"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+		</script>
+		<!-- start-smoth-scrolling -->
+		<script type="text/javascript">
+			var customer = '{{request.user}}'
+
+			function getToken(name) {
+				let cookieValue = null;
+				if (document.cookie && document.cookie !== '') {
+					const cookies = document.cookie.split(';');
+					for (let i = 0; i < cookies.length; i++) {
+						const cookie = cookies[i].trim();
+						if (cookie.substring(0, name.length + 1) === (name + '=')) {
+							cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+							break;
+						}
+					}
+				}
+				return cookieValue;
+			}
+			const csrftoken = getToken('csrftoken');
+		</script>
+  </head>
+  <body>
+	  {% block body %}
+
+		<!-- header -->
+			<div class="agileits_header">
+				
+				<!-- search start -->
+				<div class="w3l_search">
+					<form action="/search/" method="post">
+
+						{% csrf_token %}
+						<input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="search a product" required="">
+						<input type="submit" value=" ">
+					</form>
+					
+				</div>
+				<!-- search end -->
+				
+				
+				<div class="product_list_header">  
+					
+				</div>
+				<div class="w3l_header_right1 my-1 mr-3">
+					<ul>
+						<li class="dropdown profile_details_drop">
+							{% if user.is_authenticated %}
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"><h6>{{request.user.username}}</h6></span></a>
+							{% else %}
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><span class="caret"></span></a>
+							{% endif %}
+							<div class="mega-dropdown-menu">
+								<div class="w3ls_vegetables">
+									<ul class="dropdown-menu drp-mnu">
+										{% if user.is_authenticated %}
+											<li><a href="/userProfile/"><i class="fa fa-user"></i> {{request.user}}</a></li>
+											<li><a href="/logout/">logout</a></li>
+										{% else %} 
+											<li><a href="/login/">Login/signup</a></li>
+										{% endif %}
+									</ul>
+								</div>                  
+							</div>	
+						</li>
+					</ul>
+				</div>
+				<div class="w3l_header_right my-2 mr-3">
+					{% if user.is_authenticated %}
+						<fieldset>
+							
+							<a href="/cart/"><button style="font-size:4 rem; background-color: brown; color: turquoise;">View your cart <i class="fa fa-shopping-cart"></i></button></a>
+							<span class='badge badge-warning' id='lblCartCount'>{{totalItem}}</span>
+						</fieldset>
+					{% endif %}
+					
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		<!-- script-for sticky-nav -->
+			<script>
+			$(document).ready(function() {
+				var navoffeset=$(".agileits_header").offset().top;
+				$(window).scroll(function(){
+					var scrollpos=$(window).scrollTop(); 
+					if(scrollpos >=navoffeset){
+						$(".agileits_header").addClass("fixed");
+					}else{
+						$(".agileits_header").removeClass("fixed");
+					}
+				});
+				
+			});
+			</script>
+		<!-- //script-for sticky-nav -->
+			<div class="logo_products">
+				<div class="container">
+					<div class="w3ls_logo_products_left">
+						<h1><a href="/"><span>Fresh</span>Market</a></h1>
+					</div>
+					<div class="w3ls_logo_products_left1">
+						
+					</div>
+					<div class="w3ls_logo_products_left1">
+						<ul class="phone_email">
+							<li><i class="fa fa-phone" aria-hidden="true"></i>+91 7736666049</li>
+							<li><i class="fa fa-envelope-o" aria-hidden="true"></i><a href="mailto:saleemalik13@gmail.com">saleemalik13@gmail.com</a></li>
+							
+						</ul>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+		<!-- //header -->
+		{% block profile %}
+		<!-- banner -->
+      <div class="banner">
+        <div class="w3l_banner_nav_left">
+          <nav class="navbar nav_bottom">
+            <div class="navbar-header nav_2">
+              <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+              <ul class="nav navbar-nav nav_1">
+				{% for cat in catgrs %}
+                <li><a href="/category/{{cat.id}}">{{cat.categoryName}}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </nav>
+        </div>
+	
+    {% block content %}
+
+    {% endblock %}
+	<!-- fresh-vegetables -->
+	<div class="fresh-vegetables">
+		<div class="container">
+		
+				{% endblock %}
+				
+			</div>
+		</div>
+	</div>
+	
+		
+		<!-- //newsletter -->
+		<!-- footer -->
+	<div class="footer">
+		<div class="container">
+			<div class="col-md-3 w3_footer_grid">
+			
+			
+			</div>
+			<div class="col-md-3 w3_footer_grid">
+			
+			</div>
+			<div class="col-md-3 w3_footer_grid">
+			
+			</div>
+			<div class="col-md-3 w3_footer_grid">
+			
+			</div>
+			<div class="clearfix"> </div>
+			<div class="agile_footer_grids">
+			<div class="col-md-3 w3_footer_grid agile_footer_grids_w3_footer">
+				<div class="w3_footer_grid_bottom">
+				<h4>100% secure payments</h4>
+				<img src="{% static 'images/card.png' %}" alt=" " class="img-responsive" />
+				</div>
+			</div>
+			<div class="col-md-3 w3_footer_grid agile_footer_grids_w3_footer">
+				<div class="w3_footer_grid_bottom">
+				<h5>connect with us</h5>
+				<ul class="agileits_social_icons">
+					<li><a href="https://www.linkedin.com/in/saleem-malik-497115170/" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
+					<li><a href="https://www.facebook.com/saleemalik13" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+					<li><a href="https://twitter.com/SaleemM22011989" class="twitter"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+					<li><a href="https://github.com/Saleemalik" class="Github"><i class="fa fa-github " aria-hidden="true"></i></a></li>
+					<li><a href="https://www.youtube.com/channel/UCoaatVwO66zDpYx4VIawXqw" class="Youtube"><i class="fa fa-youtube " aria-hidden="true"></i></a></li>
+				</ul>
+				</div>
+			</div>
+			<div class="clearfix"> </div>
+			</div>
+			<div class="wthree_footer_copy">
+			<p>© 2016 Grocery Store. All rights reserved | Design by <a href="http://w3layouts.com/">W3layouts</a></p>
+			</div>
+		</div>
+	</div>
+
+		<!-- //footer -->
+		<!-- Bootstrap Core JavaScript -->
+	{% endblock %}	
+	<!-- <script src="{% static 'js/bootstrap.min.js' %}"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.0.0/cropper.min.js"></script> -->
+	<script src="https://foliotek.github.io/Croppie/croppie.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+	<script>
+	$(document).ready(function(){
+		console.log('hb');
+		$(".dropdown").hover(            
+			function() {
+				$('.dropdown-menu', this).stop( true, true ).slideDown("fast");
+				$(this).toggleClass('open');        
+			},
+			function() {
+				$('.dropdown-menu', this).stop( true, true ).slideUp("fast");
+				$(this).toggleClass('open');       
+			}
+		);
+	});
+	</script>
+	<!-- here stars scrolling icon -->
+	<script type="text/javascript">
+	$(document).ready(function() {
+		/*
+			var defaults = {
+			containerID: 'toTop', // fading element id
+			containerHoverID: 'toTopHover', // fading element hover id
+			scrollSpeed: 1200,
+			easingType: 'linear' 
+			};
+		*/
+					
+		$().UItoTop({ easingType: 'easeOutQuart' });
+					
+		});
+	</script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+		<!-- //here ends scrolling icon -->
+	<!-- <script src="{% static 'js/minicart.min.js' %}"></script> -->
+	<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+	<script src="{% static 'assets/js/crop.js' %}"></script>
+
+  </body>
+</html>

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block profile %}
+<div class="container">
+    <div class="main-body">
+    
+          <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Your coupons</li>
+            </ol>
+        </nav>
+        <!-- /Breadcrumb -->
+        {% if unusedCoupons|length == 0 %}
+        <div class="card h-100" style="margin: 0 auto ; float: none; margin-bottom: 20rem ; margin-top: 15rem;">
+            <div class="card-body">
+                <h3 class="text-center">You don't Have any coupon!</h3>
+                <br>
+                <h5 class="text-center"><a href="/userProfile/">go to your profile?</a></h5>
+            </div>        
+        </div>
+      {% else %}
+        <!-- coupons start -->
+        <br><br>
+        <div class="row gutters-sm mx-3">
+            {% for coupon in unusedCoupons %}
+            <div class="col-sm-4 mb-3 ">
+                <div class="card h-100">
+                    <div class="card-body">
+                    <address>
+                        <p class="card-text">{{coupon.couponName}}</p>
+                        <p class="card-text">CODE: {{coupon.couponCode}}   </p>
+                        <p class="card-text">discount: {{coupon.discount}} % Off. </p>
+                        {% if coupon.validTo %}
+                        <p class="card-text">Expiry date:  {{coupon.validTo}} </strong></p>
+                        {% else %}
+                        <p class="card-text">card will not expired </strong></p>
+                        {% endif %}
+
+                    </address>
+                </div>
+                </div>
+                
+            </div>
+            {% endfor %}
+          </div>
+          
+        <!-- coupons end -->
+        {% endif %}
+    </div>
+</div>
+<br><br><br>
+{% endblock %}

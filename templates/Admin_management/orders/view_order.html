@@ -1,0 +1,114 @@
+{% extends 'Abase.html' %}
+{% block content %}
+
+        <!-- page title area start -->
+        <div class="page-title-area">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="breadcrumbs-area clearfix">
+                        <h4 class="page-title pull-left">VIEW ORDER</h4>
+                        <ul class="breadcrumbs pull-left">
+                            <li><a href="/admin1/adminD/">Home</a></li>
+                            <li><span>Dashboard</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6 clearfix">
+                    <div class="user-profile pull-right">
+                        <img class="avatar user-thumb" src="{% static 'assets/images/author/avatar.png' %}" alt="avatar">
+                        <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Saleem Malik <i class="fa fa-angle-down"></i></h4>
+                        <div class="dropdown-menu">
+                            <!-- <a class="dropdown-item" href="#">Message</a>
+                            <a class="dropdown-item" href="#">Settings</a> -->
+                            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- page title area end -->
+
+<div class="my-3 mt-5">
+    <div class="pt-4 wish-list mx-5">
+        <!-- <h5 class="mb-4">Cart (<span>5</span> items)</h5> -->
+        {% for product_array in product_arrays %}
+         
+        <div class="row mb-4">
+            <div class="col-md-5 col-lg-3 col-xl-3">
+                <div class="view zoom overlay z-depth-1 rounded mb-3" style="width: 15rem;">
+                    <img class="img-fluid w-100" src="{{product_array.2}}" alt="Sample" style="height: 10rem;" >
+
+                </div>
+            </div>
+            <div class="col-md-7 col-lg-9 col-xl-9">
+                <div>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5>{{product_array.0.productName}}</h5>
+                           
+                        </div>
+                    </div>
+                    <div class="def-number-input number-input safari_only mb-0 w-100 my-3">
+                        <label for="quantity">Qty: {{product_array.0.quantity}}</label>
+                        
+                    </div>
+                    <br><br>
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <p class="mb-0"><span><strong id="summary">Price:
+                                    ₹{{product_array.0.price}}</strong></span></p>
+                        
+                        {% if product_array.1 != 0.0 %}
+                        <p class="mb-0"><span><strong id="summary">Offered Price:
+                                    ₹{{product_array.1}}</strong></span></p>
+                        {% endif %}
+                        
+                        <!-- <p class="mb-0"><span id="totalinput{{cart.id}}" value="{{cart.product.price}}" hidden><strong>Total: ₹<span>{{cart.get_total}}</span></strong></span></p class="mb-0"> -->
+                        <p class="mb-0"><span><strong>Total: ₹<span
+                                        id="total">{{product_array.0.total}}</span></strong></span></p
+                            class="mb-0">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="mb-4">
+        {% endfor %}
+    </div>
+</div>
+
+    <div class="col-lg-4 pr-5">
+        <!-- Card -->
+        <div class="mb-3    ">
+            <div class="pt-4">
+
+                <h5 class="mb-3">The total amount of</h5>
+
+                <ul class="list-group list-group-flush">
+
+                    <li
+                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-3 pb-0">
+                        Sub-total:
+                        <span id="sub">₹{{sub_total}}</span>
+                    </li>
+                    <li
+                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-3 mb-3">
+                        <div>
+                            <strong>The total amount with coupon discount:</strong>
+                            <strong>
+                                <p class="mb-0">(including shipping charge) </p>
+                            </strong>
+                        </div>
+                        <span >₹<strong id="grand">{{amount}}</strong></span>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>    
+    <!-- Card -->
+
+    
+
+
+
+{% endblock %}

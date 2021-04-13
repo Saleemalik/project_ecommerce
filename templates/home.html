@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block content %}
+      
+        <div class="w3l_banner_nav_right">
+          <section class="slider">
+            <div class="flexslider">
+              <ul class="slides">
+                <li>
+                  <div class="w3l_banner_nav_right_banner">
+                    <h3>Premium Quality <span>Fresh</span> Sea Food.</h3>
+                    <div class="more">
+                      <a href="/category/33" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="w3l_banner_nav_right_banner1">
+                    <h3>Healthy Life<span>Vegie</span> with Organic.</h3>
+                    <div class="more">
+                      <a href="/category/51" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="w3l_banner_nav_right_banner2">
+                    <h3>upto <i>50%</i> off.</h3>
+                    <div class="more">
+                      <a href="/category/51" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+          <!-- flexSlider -->
+            <link rel="stylesheet" href="{% static 'css/flexslider.css' %}" type="text/css" media="screen" property="" />
+            <script defer src="{% static 'js/jquery.flexslider.js' %}"></script>
+            <script type="text/javascript">
+            $(window).load(function(){
+              $('.flexslider').flexslider({
+              animation: "slide",
+              start: function(slider){
+                $('body').removeClass('loading');
+              }
+              });
+            });
+            </script>
+          <!-- //flexSlider -->
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <!-- banner -->
+      <div class="banner_bottom">
+          <div class="wthree_banner_bottom_left_grid_sub">
+          </div>
+          <div class="wthree_banner_bottom_left_grid_sub1">
+            <div class="col-md-4 wthree_banner_bottom_left">
+              <div class="wthree_banner_bottom_left_grid">
+                <img src="{% static 'images/4.jpg' %}" alt=" " class="img-responsive" />
+                <div class="wthree_banner_bottom_left_grid_pos">
+                  <h4>Discount Offer <span>25%</span></h4>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 wthree_banner_bottom_left">
+              <div class="wthree_banner_bottom_left_grid">
+                <img src="{% static 'images/chickencut.png' %}" alt=" " class="img-responsive" />
+                <div class="wthree_banner_btm_pos">
+                  <h3>introducing <span>best</span> for <i>chicken cut</i></h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 wthree_banner_bottom_left">
+              <div class="wthree_banner_bottom_left_grid">
+                <img src="{% static 'images/6.jpg' %}" alt=" " class="img-responsive" />
+                <div class="wthree_banner_btm_pos1">
+                  <h3>Save <span>Upto</span> ₹500 </h3>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"> </div>
+          </div>
+          <div class="clearfix"> </div>
+      </div>
+      <!-- top-brands -->
+      <div class="top-brands">
+        <div class="container">
+          <h3>Hot Products</h3>
+          <div class="agile_top_brands_grids">
+            {% for prod in prods %}
+            <div class="col-md-3 top_brand_left mb-3">
+              <div class="hover14 column">
+               
+                <div class="agile_top_brand_left_grid">
+                  {% if prod.category.categoryOffer %}
+                  <div class="agile_top_brand_left_grid_pos">
+                    <img src="{% static 'images/offer.png' %}" alt=" " class="img-responsive" />
+                  </div>
+                  {% endif %}
+                  <!-- <div class="tag"><img src="{% static 'images/tag.png' %}" alt=" " class="img-responsive" /></div> -->
+                  <div class="agile_top_brand_left_grid1">
+                    <figure>
+                      <div class="snipcart-item block" style="height: 320px;">
+                          <div class="snipcart-thumb">
+                              <a href="/product/{{prod.id}}"><img src="{{prod.imgurl1}}" alt=" " class="img-responsive" style="width: 12rem; height: 12rem;" /></a>
+                              <p class="mt-2">{{prod.productName}}</p>
+                              {% if prod.category.categoryOffer %}
+                              <h4 class="mt-2">{{prod.offered_price}} <span>{{prod.price}}</span></h4>
+                              {% else %}
+                              <h4 class="mt-2">{{prod.price}}</h4>
+                              {% endif %}
+                          </div>
+                          <div class="snipcart-details">
+                              
+                                  <fieldset>
+                                      <!-- <button class="button" type="button">Add to cart</button> -->
+                                      <input data-product="{{prod.id}}" data-action="add" type="button"  value="Add to cart" class="button update-cart"/>
+                                  </fieldset>
+                                
+                              
+                          </div>
+                      </div>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            
+            
+            <div class="clearfix"> </div>
+          </div>
+        </div>
+      </div>
+      <!-- //top-brands -->
+      
+      
+      
+      
+      
+{% endblock %}

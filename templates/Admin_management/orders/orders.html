@@ -1,0 +1,99 @@
+{% extends 'Abase.html' %}
+{% block content %}
+        <!-- page title area start -->
+        <div class="page-title-area">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="breadcrumbs-area clearfix">
+                        <h4 class="page-title pull-left">ORDER LIST</h4>
+                        <ul class="breadcrumbs pull-left">
+                            <li><a href="/admin1/adminD/">Home</a></li>
+                            <li><span>Dashboard</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6 clearfix">
+                    <div class="user-profile pull-right">
+                        <img class="avatar user-thumb" src="{% static 'assets/images/author/avatar.png' %}" alt="avatar">
+                        <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Saleem Malik <i class="fa fa-angle-down"></i></h4>
+                        <div class="dropdown-menu">
+                            <!-- <a class="dropdown-item" href="#">Message</a>
+                            <a class="dropdown-item" href="#">Settings</a> -->
+                            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- page title area end -->
+<div class="panel panel-primary" style="margin: 51px; padding: 0;">
+    <div class="panel-heading">
+        <h3 class="panel-title">Order List</h3>
+    </div>
+    <div class="panel-body" style="padding: 0;">
+        <div style="width: 100%;">
+            <div class="table-responsive"> 
+                <table id="example" class="table table-striped table-hover dt-responsive" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Order id.</th>
+                            <th>Username</th>
+                            <th>Shipping Name</th>
+                            <th>Alternate phone No.</th>
+                            <th>Landmark</th>
+                            <th>Email</th>
+                            <th>Order date</th>
+                            <th>Amount</th>
+                            <th>Payment status</th>
+                            <th>Order Status and Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{order.id}}</td>
+                            <td>{{order.userId.details.username}}</td>
+                            <td>{{order.shipName}}</td>
+                            <td>{{order.phoneNo}}</td>
+                            <td>{{order.landMark}}</td>
+                            <td>{{order.userId.details.email}}</td>
+                            <td>{{order.dateOrdered}}</td>
+                            <td>{{order.amount}}</td>
+                            <td>
+                                {% if order.complete %}
+                                <p><strong>complete</strong></p>
+                                {% else %}
+                                <p><strong>pending (c.o.d)</strong></p>
+                                {% endif %}
+                            </td>
+                            <td>
+                            {% if order.shipped %}
+                                {% if order.delevered %}
+                                    <a href="/admin1/order_status/{{order.id}}" type="button" class="btn btn-rounded btn-light mb-2">Complete</a>
+                                {% else %}
+                                    <a href="/admin1/order_status/{{order.id}}" type="button" class="btn btn-rounded btn-dark mb-2" onclick="return confirm('delever all items?');">Delevered</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="/admin1/order_status/{{order.id}}" type="button" class="btn btn-rounded btn-info mb-2" onclick="return confirm('Shipping');">SHIPPING</a>
+                            {% endif %}
+                                <a href="/admin1/viewOrder/{{order.id}}" type="button" class="btn btn-rounded btn-success mb-2">View Order</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+        <script>
+            $(document).ready(function() {
+            $('#example').DataTable();
+            } );
+        </script>
+
+{% endblock %}

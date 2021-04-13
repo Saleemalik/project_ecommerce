@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="w3l_banner_nav_right">
+        
+        
+        <div class="w3ls_w3l_banner_nav_right_grid w3ls_w3l_banner_nav_right_grid_veg">
+            <h6 class="w3l_fruit">Your search:{{searchItem}}</h6>
+           
+            {% if not item  %}
+                <div class="card h-100" style="width: 35rem; margin: 0 auto ; float: none; margin-bottom: 20rem ; margin-top: 15rem;">
+                    <div class="card-body">
+                        <h3 class="text-center">Sorry No product found</h3>
+                        <br>
+                        <h5 class="text-center"><a href="/">Continue shopping?</a></h5>
+                    </div>        
+                </div>
+            
+            {% else %}
+                    {% for product in item %}
+                
+                <div class="w3ls_w3l_banner_nav_right_grid1 w3ls_w3l_banner_nav_right_grid1_veg">
+                        <div class="col-md-3 w3ls_w3l_banner_left w3ls_w3l_banner_left_asdfdfd" style="margin-top: 2em;">
+                            <div class="hover14 column">
+                                <div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid">
+                                    <!-- <div class="tag"><img src="{{cat.offer}}" alt=" " class="img-responsive"></div> -->
+                                    <div class="agile_top_brand_left_grid1">
+                                        <figure>
+                                            <div class="snipcart-item block">
+                                                <div class="snipcart-thumb">
+                                                    <a href="/product/{{product.id}}"><img src="{{product.imgurl1}}" alt=" " class="img-responsive" style="width: 12rem; height: 12rem;" /></a>
+                                                    <p>{{product.productName}}</p>
+                                                    <h4>{{product.price}}</h4>
+                                                </div>
+                                                <div class="snipcart-details">
+                                                    
+                                                        <fieldset>
+                                                            <!-- <button class="button" type="button">Add to cart</button> -->
+                                                            <input data-product="{{product.id}}" data-action="add" type="button"  value="Add to cart" class="button update-cart"/>
+                                                        </fieldset>
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                </div>
+                    {% endfor %}
+            {% endif %}
+        
+        </div>
+    </div>    
+    <div class="clearfix"></div>
+
+{% endblock %}

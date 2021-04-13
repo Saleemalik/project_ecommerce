@@ -1,0 +1,73 @@
+{% extends 'Abase.html' %}
+{% block content %}
+      <!-- page title area start -->
+      <div class="page-title-area">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <div class="breadcrumbs-area clearfix">
+                    <h4 class="page-title pull-left">Products</h4>
+                    <ul class="breadcrumbs pull-left">
+                        <li><a href="/admin1/adminD/">Home</a></li>
+                        <li><span>Dashboard</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-6 clearfix">
+                <div class="user-profile pull-right">
+                    <img class="avatar user-thumb" src="{% static 'assets/images/author/avatar.png' %}" alt="avatar">
+                    <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Saleem Malik <i class="fa fa-angle-down"></i></h4>
+                    <div class="dropdown-menu">
+                        <!-- <a class="dropdown-item" href="#">Message</a>
+                        <a class="dropdown-item" href="#">Settings</a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- page title area end -->
+    <br>
+    {% for cat in catgrs %}
+        <h2 class="text-center">{{cat.categoryName}}</h2>
+        <hr>
+        
+        {% for prod in prods %}
+        {% if prod.category.categoryName == cat.categoryName%}
+                <div class="main-content-inner">
+                    <div class="row">
+                        <div class="col-lg-12 mt-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media mb-2">
+                                        <img class="img-fluid mr-4" src="{{prod.imgurl1}}" alt="image" style="width: 250px; height: 200px;">
+                                        <div class="media-body">
+                                            <br>
+                                            <h4 class="mb-3">{{prod.productName}}</h4>
+                                            <br>
+                                            <h4 class="mb-3">Price: {{prod.price}}</h4>     
+                                        </div>
+                                        <div class="media-body">
+                                            <br>
+                                            <h6 class="mb-3">Qty available(in kg.): {{prod.quantity}}</h6>
+                                            <br>
+                                            <h6 class="mb-3">desc:{{prod.description}} </h6>     
+                                        </div>
+                                        <div>
+                                            <a href="/admin1/editProd/{{prod.id}}" type="button" class="btn btn-rounded btn-primary mb-3">EDIT</a>
+                                            <a href="/admin1/delProduct/{{prod.id}}" type="button" class="btn btn-rounded btn-danger mb-3" onclick="return confirm('Are you sure you want to delete this item?');">DELETE</a>
+                                          
+                                        </div>
+                                       
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+        {% endfor %}
+       
+    {% endfor %}
+{% endblock %}

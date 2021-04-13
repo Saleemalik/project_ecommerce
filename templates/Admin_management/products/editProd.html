@@ -1,0 +1,113 @@
+{% extends 'Abase.html' %}
+
+{% block content %}
+<div class="col-lg-12 col-ml-12">
+    <div class="row">
+                <!-- basic form start -->
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">EDIT A PRODUCT</h4>
+
+
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+                    <form>
+
+
+                    <label >Choose Image</label>
+
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                            <input type="file"  accept="image/*" name="img1" id="imgInp1">
+                            <input type="file"  accept="image/*" name="img2" id="imgInp2">
+                            <input type="file"  accept="image/*" name="img3" id="imgInp3">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="example-text-input" class="col-form-label">Product Name</label>
+                        <input class="form-control" type="text" value="{{prodEdit.productName}}" name="nameP"  placeholder="Enter Product name" id="nameP">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Select Category</label>
+                        <select class="form-control" name="catName" id="catName">
+                            <option>{{ prodEdit.category.categoryName }}</option>
+                            {% for cat in catgrs %}
+                            {% if prodEdit.category.categoryName != cat.categoryName %}
+                            <option>{{cat.categoryName}}</option>
+                            {% endif %}
+                            {% endfor %}
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-number-input" class="col-form-label">Price Per Kg.</label>
+                        <input class="form-control" type="number" value="{{prodEdit.price}}" min="1" name="price" id="price" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label for="example-number-input" class="col-form-label">Available Quanity in Kg.</label>
+                        <input class="form-control" type="number" value="{{prodEdit.quantity}}" min="1" name="Qty" id="Qty" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label for="example-text-input" class="col-form-label">Desciption</label>
+                        <textarea class="form-control" id="desc" name="desc">{{prodEdit.description}}</textarea>>
+                    </div>
+
+                    <div>
+                        <button type="button" id="log-button" class="btn btn-primary mt-4 pr-4 pl-4">UPDATE</button>
+                        <p id="errormsg" class="text-center"></p>
+                    </div>
+
+                    </form>
+                    <script>
+                    $('#log-button').click(function(){
+                        var formData = new FormData();
+                        formData.append("nameP", document.getElementById("nameP").value);
+                        formData.append("catName", document.getElementById("catName").value);
+                        formData.append("imgInp1", document.getElementById("imgInp1").files[0]);
+                        formData.append("imgInp2", document.getElementById("imgInp2").files[0]);
+                        formData.append("imgInp3", document.getElementById("imgInp3").files[0]);
+                        formData.append("price", document.getElementById("price").value);
+                        formData.append("Qty", document.getElementById("Qty").value);
+                        formData.append("desc", document.getElementById("desc").value);
+                        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                        if (nameP.value === ""){
+                            $('#errormsg').html("please fill all field")
+                        }
+                        else if(catName.value === "Select" || price.value === "Select" || Qty.value === ""|| desc.value === ""){
+                            $('#errormsg').html("please fill all field")
+                        }
+                        
+                        else{
+                            $.ajax({
+                                url:'/admin1/editProd/{{prodEdit.id}}',
+                                method : 'POST',
+                                data : formData,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                dataType: 'JSON',
+                                
+                                success: function(data){
+                                    if (data == 'true'){
+                                        console.log(data)
+                                        window.location.replace('/admin1/products/')
+                                    }
+                                    else if(data == 'false1'){
+                                        
+                                        $("#errormsg").html("product Name exists")
+                                    }
+                                    
+                                }
+                            })
+                        }
+                    })
+                    </script>
+
+                </div>
+            </div>
+        </div>
+        <!-- basic form end -->
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'Abase.html' %}
+
+{% block content %}
+<div class="col-lg-12 col-ml-12">
+    <div class="row">
+        <!-- basic form start -->
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">EDIT CATEGORY</h4>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.0.0/cropper.min.js"></script>
+                    <form>
+
+                        
+                        <div class="input-group mb-3">
+                           
+                            <div class="input-group-prepend">
+                                <img id="blah" src="{{catEdit.imageurl}}" style="width: 10rem;" alt="category image" />
+                                    <!-- // Will trigger crop event -->
+                                    <button type="button" id="crop_button">Crop</button> 
+                                    <div id="cropped_result"></div>
+                            </div>
+                            <div class="custom-file">
+                                
+                                <input type="file"  accept="image/*"  name="img" id="inputGroupFile01" onchange="readURL(this);">
+                                <label class="custom-file-label" for="inputGroupFile01">Choose Image</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="example-text-input" class="col-form-label">Category Name</label>
+                            <input class="form-control" type="text" value="{{catEdit.categoryName}}" name="name"  placeholder="Enter category name" id="names">
+                        </div>
+                        <div>
+                            <button type="button" id="log-button" class="btn btn-primary mt-4 pr-4 pl-4">Update</button>
+                            <p id="errormsg" class="text-center"></p>
+                        </div>
+                       
+                    </form>
+
+                    <script>
+                        var imgurl;
+                        function readURL(input) {
+                            if (input.files && input.files[0]) {
+                              var reader = new FileReader();
+                              reader.onload = function (e) {
+                                  console.log('hellosdd')
+                                $('#blah').attr('src', e.target.result)
+                              };
+                              reader.readAsDataURL(input.files[0]);
+                              setTimeout(initCropper, 1000);
+                            }
+                          }
+                          function initCropper(){
+                            console.log("Came here")
+                            var image = document.getElementById('blah');
+                            var cropper = new Cropper(image, {
+                              aspectRatio: 16 / 9,
+                              crop: function(e) {
+                                console.log(e.detail.x);
+                                console.log(e.detail.y);
+                              }
+                            });
+                          
+                            // On crop button clicked
+                            document.getElementById('crop_button').addEventListener('click', function(){
+                              imgurl =  cropper.getCroppedCanvas().toDataURL();
+                              var img = document.createElement("img");
+                              img.src = imgurl;
+                              document.getElementById("cropped_result").appendChild(img);
+                          
+                              /* ---------------- SEND IMAGE TO THE SERVER-------------------------
+                          
+                                          cropper.getCroppedCanvas().toBlob(function (blob) {
+                                                var formData = new FormData();
+                                                formData.append('croppedImage', blob);
+                                                // Use `jQuery.ajax` method
+                                                $.ajax('/path/to/upload', {
+                                                  method: "POST",
+                                                  data: formData,
+                                                  processData: false,
+                                                  contentType: false,
+                                                  success: function () {
+                                                    console.log('Upload success');
+                                                  },
+                                                  error: function () {
+                                                    console.log('Upload error');
+                                                  }
+                                                });
+                                          });
+                                      ----------------------------------------------------*/
+                            })
+                          }
+                    </script>
+                    
+                    <script>
+                        $('#log-button').click(function(){
+                            var formData = new FormData();
+                            formData.append("names", document.getElementById("names").value);
+                            formData.append("inputGroupFile01", );
+                            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                            if (names.value === "" ){
+                                $('#errormsg').html("Enter category name")
+                            }
+                            else if(inputGroupFile01.value === ""){
+                                $('#errormsg').html("upload image")
+                            }
+                            
+                            else{
+                                $.ajax({
+                                    url:'/admin1/updateCategory/{{catEdit.id}}',
+                                    method : 'POST',
+                                    data : formData,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    dataType: 'JSON',
+                                    
+                                    success: function(data){
+                                        if (data == 'true'){
+                                          console.log(data)
+                                          window.location.replace('/admin1/categories/')
+                                        }
+                                        else if(data == 'false1'){
+                                            
+                                            $("#errormsg").html("category exists")
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    </script>
+                    
+                </div>
+            </div>
+        </div>
+{% endblock %}

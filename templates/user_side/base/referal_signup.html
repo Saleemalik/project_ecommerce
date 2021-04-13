@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="w3l_banner_nav_right">
+	<!-- login -->
+			<div class="w3_login">
+				<h3>Sign In & Sign Up</h3>
+				<div class="w3_login_module">
+					<div class="module form-module">
+					  <div class="toggle"><i class="fa fa-times fa-pencil"></i>
+						<div class="tooltip" style="right: -100px;">new account?</div>
+					  </div>
+					  <div class="form">
+						<h2>Create an account</h2>
+						<form action="#" method="post">
+							{% csrf_token %}
+						  <input type="text" id="username2" name="username" placeholder="Username" >
+						  <input type="password" id="password1" name="Password1" placeholder="Password" >
+						  <input type="password" id="password2" name="Password2" placeholder="confirm Password" >
+						  <input type="email" id="email" name="email" placeholder="Email Address" >
+						  <input type="text" id="phone" name="phone" placeholder="Phone Number" >
+						  <input type="button" id="signup" value="Register">
+						  <br>
+						  <br><p id="errormesg" class="text-center"></p>
+						</form>
+					  </div>
+					  <div class="form">
+						<h2>Login to your account</h2>
+						<form action="#" method="post">
+							{% csrf_token %}
+						  <input type="text" id="username" name="Username" placeholder="Username">
+						  <input type="password" id="password" name="Password" placeholder="Password">
+						  <input type="button" id="login" value="Login">
+							<br>
+						  <br><p id="errormsg" class="text-center"></p>
+						</form>
+					  </div>
+					  
+					  	<script>
+							$('#login').click(function(){
+								
+								var username = $("#username").val();
+								var password = $("#password").val();
+								var data = {
+									'csrfmiddlewaretoken':'{{csrf_token}}',
+									'username': username,
+									'password': password
+								}
+								if (username === "" && password === ""){
+									$('#errormsg').html("enter Username and Password")
+								}
+								else if(username === ""){
+									$('#errormsg').html("enter Username")
+								}
+								else if(password === ""){
+									$('#errormsg').html("enter Password")
+								}
+								
+								else{
+									$.ajax({
+										url:'/login/',
+										method : 'POST',
+										data : data,
+										type : JSON,
+										
+										success: function(data){
+											if (data == 'true'){
+											window.location.replace('/')
+											}
+											else if(data == 'false1'){
+												
+											$("#errormsg").html("username or password wrong")
+											}
+											else if(data == 'false2'){
+												
+												$("#errormsg").html("Sorry, login is rejected")
+												}
+										}
+									})
+								}
+							})
+						</script>
+					<div class="cta"><a href="#"><h6 data-target="#OTPlogin" data-toggle="modal"><strong>LOGIN WITH OTP</strong></h6></a></div>
+					<div class="modal fade" id="OTPlogin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLongTitle">Login By OTP:</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form class="card-body">
+						
+											<!--Grid row-->
+						
+											<!--Grid row-->
+						
+											<!--address-->
+											<div class="md-form mb-5">
+												<label for="address" class="">Enter mobile number</label>
+												<input type="text" id="mobileNo" name="mobileNo" placeholder="Enter the mobile number">
+												
+											</div>
+																
+											
+											<input class="btn btn-primary btn-lg btn-block" id="otpLogin" type="button" id="signup" value="GET OTP">
+											<br>
+											<p class="text-center" id="msgs"></p>
+
+						
+										</form>
+										<script>
+											$('#otpLogin').click(function(){
+												var mobileNo = $("#mobileNo").val();
+												var phoneFormat1 = $("#mobileNo").val().length === 10;
+												var filter = /^[0-9-+]+$/;
+												var phoneFormat2 = filter.test(mobileNo);
+												
+												var data = {
+													'csrfmiddlewaretoken':'{{csrf_token}}',
+													'mobileNo': mobileNo,
+												}
+												if(mobileNo == ''){
+													$('#msgs').html('Enter the mobile number')
+												}
+												else if(phoneFormat1 == false || phoneFormat2 == false ){
+													$('#msgs').html("enter valid Phone number")
+												}
+												else{
+													$.ajax({
+														url:'/loginByotp/',
+														method : 'POST',
+														data : data,
+														type: JSON,
+
+														success:function(data){
+															if(data =='true'){
+																window.location.replace('/otp_login/')
+															}else if(data =='false'){
+																$('#msgs').html('you need to signup first')
+															}														}
+													})
+												}
+
+											})
+
+										</script>
+						
+									</div>
+								<!--/.Card-->
+					
+							</div>
+							
+						</div>
+					</div>
+					</div>
+					<script>
+						$('#signup').click(function(){
+										
+							var username = $("#username2").val();
+							var name = $("#name").val();
+							var email = $("#email").val();
+							var phone = $("#phone").val();
+							var phoneFormat1 = $("#phone").val().length === 10;
+							var filter = /^[0-9-+]+$/;
+							var phoneFormat2 = filter.test(phone);
+							var password1 = $("#password1").val();
+							var password2 = $("#password2").val();
+							var mailFormat1 = email.indexOf('@');
+							var mailFormat2 = email.lastIndexOf('.')
+							var data = {
+								'csrfmiddlewaretoken':'{{csrf_token}}',
+								'username': username,
+								'name': name,
+								'email' : email,
+								'phone' : phone,
+								'password1': password1,
+								'password2': password2,
+							}
+							if (username === "" || name === "" || email === "" || password1 === "" || password2 === "" || phone === ""){
+								$('#errormesg').html("Please fill all fields")
+							}
+							else if(mailFormat1<1 || mailFormat2 > email.length-3 || mailFormat1+2 > mailFormat2 ){
+								$('#errormesg').html("Please enter valid email address")
+							}else if(phoneFormat1 == false || phoneFormat2 == false ){
+								$('#errormesg').html("enter valid Phone number")
+							}
+							else{
+								$.ajax({
+									url:'/refferal_signup/{{refUser.id}}',
+									method : 'POST',
+									data : data,
+									type : JSON,
+									
+									success: function(data){
+										if (data == 'true'){
+											window.location.replace('/')
+										}
+										else if(data == 'false1'){
+											
+											$("#errormesg").html("username taken")
+										}
+										else if(data == 'false2'){
+											
+											$("#errormesg").html("Email already taken")
+										} 
+										else if(data == 'false3'){
+											
+											$("#errormesg").html("password not matching")
+										}
+										else if(data == 'false4'){
+											
+											$("#errormesg").html("phone number already taken")
+										}
+									}
+								})
+							}
+						})
+					</script>
+				</div>
+
+
+				<script>
+					$('.toggle').click(function(){
+					  // Switches the Icon
+					  $(this).children('i').toggleClass('fa-pencil');
+					  // Switches the forms  
+					  $('.form').animate({
+						height: "toggle",
+						'padding-top': 'toggle',
+						'padding-bottom': 'toggle',
+						opacity: "toggle"
+					  }, "slow");
+					});
+				</script>
+			</div>
+	<!-- //login -->
+			</div>
+				<div class="clearfix"></div>
+			</div>
+
+{% endblock %}

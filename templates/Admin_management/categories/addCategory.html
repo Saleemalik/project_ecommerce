@@ -1,0 +1,165 @@
+{% extends 'Abase.html' %}
+{% block content %}
+<style>
+    label.cabinet {
+        display: block;
+        cursor: pointer;
+      }
+      
+      label.cabinet input.file {
+        position: relative;
+        height: 100%;
+        width: auto;
+        opacity: 0;
+        -moz-opacity: 0;
+        filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        margin-top: -30px;
+      }
+      
+      #upload-demo {
+        width: 400px;
+        height: 250px;
+        padding-bottom: 25px;
+      }
+      #upload-demo1 {
+        width: 300px;
+        height: 250px;
+        padding-bottom: 25px;
+      }
+      #upload-demo2 {
+        width: 250px;
+        height: 250px;
+        padding-bottom: 25px;
+      }
+      
+</style>
+ <!-- page title area start -->
+ <div class="page-title-area">
+  <div class="row align-items-center">
+      <div class="col-sm-6">
+          <div class="breadcrumbs-area clearfix">
+              <h4 class="page-title pull-left">Add Category</h4>
+              <ul class="breadcrumbs pull-left">
+                  <li><a href="/admin1/adminD/">Home</a></li>
+                  <li><span>Dashboard</span></li>
+              </ul>
+          </div>
+      </div>
+      <div class="col-sm-6 clearfix">
+          <div class="user-profile pull-right">
+              <img class="avatar user-thumb" src="{% static 'assets/images/author/avatar.png' %}" alt="avatar">
+              <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Saleem Malik <i class="fa fa-angle-down"></i></h4>
+              <div class="dropdown-menu">
+                  <!-- <a class="dropdown-item" href="#">Message</a>
+                  <a class="dropdown-item" href="#">Settings</a> -->
+                  <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- page title area end -->
+<div class="col-lg-6 col-ml-12">
+    <div class="row">
+        <!-- basic form start -->
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">ADD A CATEGOERY</h4>
+                    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.0.0/cropper.min.js"></script> -->
+                    <form>
+                        <div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="cabinet center-block">
+                                        <figure>
+                                            <img src="" class="gambar img-responsive img-thumbnail" id="itemImgOutput" />
+                                            <figcaption><i class="fa fa-camera"></i></figcaption>
+                                        </figure>
+                                        <input type="file" class="item-img file center-block" name="file_photo" />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="cropImagePop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">
+                                            <?=multiLanguage( "Edit Foto" , "Edit Photo" )?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="upload-demo" class="center-block"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" id="cropImageBtn" class="btn btn-primary">Crop</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="example-text-input" class="col-form-label">Category Name</label>
+                            <input class="form-control" type="text" name="name"  placeholder="Enter category name" id="names">
+                        </div>
+                        <div>
+                            <button type="button" id="log-button" class="btn btn-primary mt-4 pr-4 pl-4">Submit</button>
+                            <p id="errormsg" class="text-center"></p>
+                        </div>
+                       
+                    </form>
+                    
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+                    <script>
+                        $('#log-button').click(function(){
+                            var formData = new FormData();
+                            formData.append("names", document.getElementById("names").value);
+                            
+                            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                    
+                            formData.append("itemImgOutput", crop);
+                            console.log('dds')
+                            if (names.value === "" ){
+                                $('#errormsg').html("Enter category name")
+                            }
+                            else{
+                                $.ajax({
+                                    url:'/admin1/catadd/',
+                                    method : 'POST',
+                                    data : formData,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    dataType: 'JSON',
+                                    
+                                    success: function(data){
+                                        if (data == 'true'){
+                                          console.log(data)
+                                          window.location.replace('/admin1/categories/')
+                                        }
+                                        else if(data == 'false1'){
+                                            
+                                            $("#errormsg").html("category exists")
+                                        }
+                                        else if(data == 'false2'){
+                                            
+                                            $("#errormsg").html("choose another Pic")
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    </script>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- basic form end -->
+
+{% endblock %}

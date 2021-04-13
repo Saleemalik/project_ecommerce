@@ -1,0 +1,260 @@
+{% extends 'Abase.html' %}
+{% block content %};
+<style>
+    label.cabinet {
+        display: block;
+        cursor: pointer;
+      }
+      
+      label.cabinet input.file {
+        position: relative;
+        height: 100%;
+        width: auto;
+        opacity: 0;
+        -moz-opacity: 0;
+        filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        margin-top: -30px;
+      }
+      
+      #upload-demo3 {
+        width: 250px;
+        height: 250px;
+        padding-bottom: 25px;
+      }
+      #upload-demo1 {
+        width: 250px;
+        height: 250px;
+        padding-bottom: 25px;
+      }
+      #upload-demo2 {
+        width: 250px;
+        height: 250px;
+        padding-bottom: 25px;
+      }
+      
+    
+      
+</style>
+
+<div class="col-lg-12 col-ml-12">
+    <div class="row">
+        <!-- basic form start -->
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">ADD A PRODUCT</h4>
+                    
+                    
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+                    <form>
+
+                        
+                        <label >Choose images:</label>
+                        <br><br><br><br><br><br><br><br>
+                       <div style="max-height: 100%;" class=" ml-5">
+                        <div class="input-group mb-5 ml-4">
+                            <div class="custom-file mb-5">
+                                <!-- first -->
+                                <div class="col-md-3 mb-3 mr-5">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <label class="cabinet center-block">
+                                                <figure>
+                                                    <img src="" class="gambar2 img-responsive img-thumbnail" id="itemImgOutput1" />
+                                                    <figcaption><i class="fa fa-camera"></i></figcaption>
+                                                </figure>
+                                                <input type="file" class="item-img1 file center-block" name="file_photo" />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="cropImagePop1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">
+                                                    <?=multiLanguage( "Edit Foto" , "Edit Photo" )?></h4>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <div id="upload-demo1" class="text-center"></div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="button" id="cropImageBtn1" class="btn btn-primary">Crop</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Seconds -->
+                                <div class="col-md-3 mb-3 ml-3 mr-5">
+                                    <div class="container mr-3">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <label class="cabinet center-block">
+                                                <figure>
+                                                    <img src="" class="gambar2 img-responsive img-thumbnail" id="itemImgOutput2" />
+                                                    <figcaption><i class="fa fa-camera"></i></figcaption>
+                                                </figure>
+                                                <input type="file" class="item-img2 file center-block" name="file_photo" />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                    <div class="modal fade" id="cropImagePop2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">
+                                                    <?=multiLanguage( "Edit Foto" , "Edit Photo" )?></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="upload-demo2" class="center-block"></div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="button" id="cropImageBtn2" class="btn btn-primary">Crop</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- third -->
+                                <div class="col-md-3 mb-3 ml-3">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <label class="cabinet center-block">
+                                                <figure>
+                                                    <img src="" class="gambar2 img-responsive img-thumbnail" id="itemImgOutput3" />
+                                                    <figcaption><i class="fa fa-camera"></i></figcaption>
+                                                </figure>
+                                                <input type="file" class="item-img3 file center-block" name="file_photo" />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="modal fade" id="cropImagePop3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">
+                                                    <?=multiLanguage( "Edit Foto" , "Edit Photo" )?></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="upload-demo3" class="center-block"></div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="button" id="cropImageBtn3" class="btn btn-primary">Crop</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       </div>
+                       <br><br>
+                       <div>
+                            <div class="form-group">
+                                <label for="example-text-input" class="col-form-label">Product Name</label>
+                                <input class="form-control" type="text" name="nameP"  placeholder="Enter Product name" id="nameP">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Select Category</label>
+                                <select class="form-control" name="catName" id="catName">
+                                    <option>Select</option>
+                                    {% for cat in catgrs %}
+                                    <option>{{cat.categoryName}}</option>
+                                    {% endfor %}
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-number-input" class="col-form-label">Price Per Kg.</label>
+                                <input class="form-control" type="number"  min="1" name="price" id="price" step="any">
+                            </div>
+                            <div class="form-group">
+                                <label for="example-number-input" class="col-form-label">Available Quanity in Kg.</label>
+                                <input class="form-control" type="number"  min="1" name="Qty" id="Qty" step="any">
+                            </div>
+                            <div class="form-group">
+                                <label for="example-text-input" class="col-form-label">Desciption</label>
+                                <textarea class="form-control" id="desc" name="desc"></textarea>
+                            </div>
+
+                            <div>
+                                <button type="button" id="log-button" class="btn btn-primary mt-4 pr-4 pl-4">Add</button>
+                                <p id="errormsg" class="text-center"></p>
+                            </div>
+                       </div>
+                        <br><br>
+                        
+                       
+                    </form>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                    <script>
+                        $('#log-button').click(function(){
+                            var formData = new FormData();
+                            formData.append("nameP", document.getElementById("nameP").value);
+                            formData.append("catName", document.getElementById("catName").value);
+                            formData.append("price", document.getElementById("price").value);
+                            formData.append("Qty", document.getElementById("Qty").value);
+                            formData.append("desc", document.getElementById("desc").value);
+                            formData.append("crop1", crop1);
+                            formData.append("crop2", crop2);
+                            formData.append("crop3", crop3);
+                            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                            if (crop1 === ""|| crop2 === ""|| crop3 === ""){
+                                $('#errormsg').html("choose all 3 images")
+                            }else if(nameP === ''){
+                                $('#errormsg').html("please fill product name")
+                            }else if(catName.value === "Select"){
+                                $('#errormsg').html("select the category")
+                            }else if(price.value === ""){
+                                $('#errormsg').html("fill product price")
+                            }else if(Qty.value === ""){
+                                $('#errormsg').html("write the quntity available")
+                            }
+                            else if(desc.value === ""){
+                                $('#errormsg').html("write any description about the product")
+                            }
+                            
+                            else{
+                                $.ajax({
+                                    url:'/admin1/addProduct/',
+                                    method : 'POST',
+                                    data : formData,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    dataType: 'JSON',
+                                    
+                                    success: function(data){
+                                        if (data == 'true'){
+                                          console.log(data)
+                                          window.location.replace('/admin1/products/')
+                                        }
+                                        else if(data == 'false1'){
+                                            
+                                            $("#errormsg").html("category exists")
+                                        }
+                                        
+                                    }
+                                })
+                            }
+                        })
+                    </script>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- basic form end -->
+{% endblock %}

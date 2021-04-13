@@ -1,0 +1,150 @@
+{% extends 'Abase.html' %}
+{% block content %}
+   <!-- page title area start -->
+ <div class="page-title-area">
+    <div class="row align-items-center">
+        <div class="col-sm-6">
+            <div class="breadcrumbs-area clearfix">
+                <h4 class="page-title pull-left">Add Coupons</h4>
+                <ul class="breadcrumbs pull-left">
+                    <li><a href="/admin1/adminD/">Home</a></li>
+                    <li><span>Dashboard</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-6 clearfix">
+            <div class="user-profile pull-right">
+                <img class="avatar user-thumb" src="{% static 'assets/images/author/avatar.png' %}" alt="avatar">
+                <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Saleem Malik <i class="fa fa-angle-down"></i></h4>
+                <div class="dropdown-menu">
+                    <!-- <a class="dropdown-item" href="#">Message</a>
+                    <a class="dropdown-item" href="#">Settings</a> -->
+                    <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <!-- page title area end -->
+  <!-- add coupon start -->
+  <div class="col-lg-6 col-ml-12">
+    <div class="row">
+        <!-- basic form start -->
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">ADD A COUPON</h4>
+                    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.0.0/cropper.min.js"></script> -->
+                    <form>
+                        <div class="form-group">
+                            <label for="example-text-input" class="col-form-label">Coupon Name: </label>
+                            <input class="form-control" type="text" id="couponName" placeholder="enter Name" name="couponName" >
+                            <!-- <input class="form-control" type="" name="name"  placeholder="Enter category name" > -->
+                        </div>
+                        <div class="form-group">
+                            <label for="example-text-input" class="col-form-label">Coupon valid from:</label>
+                            <input class="form-control" type="text" id="validFrom" placeholder="enter from date" name="validFrom" >
+                            <!-- <input class="form-control" type="" name="name"  placeholder="Enter category name" > -->
+                        </div>
+                        <div class="form-group">
+                            <label for="example-text-input" class="col-form-label">Coupon valid to:</label>
+                            <input class="form-control" type="text" id="validTo" placeholder="enter to date" name="validTo">
+                            <!-- <input class="form-control" type="" name="name"  placeholder="Enter category name" > -->
+                        </div>
+                        <div class="form-group">
+                            <label for="example-text-input" class="col-form-label">discount ( in percentage)</label>
+                            <input class="form-control" type="number" name="discount"  placeholder="enter between 1-99 " id="discount" min="1" max="99">
+                        </div>
+                        
+                        <div>
+                            <button type="button" id="addCoupon" class="btn btn-primary mt-4 pr-4 pl-4">Submit</button>
+                            <p id="errormsg" class="text-center"></p>
+                        </div>
+                       
+                    </form>
+                    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+                    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+                    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script> -->
+                    <script type="text/javascript">
+                        $(function () {
+                            $.datepicker.setDefaults({
+                                dateFormat: 'yy-mm-dd'
+                            });
+                            $("#validFrom").datepicker({
+                                numberOfMonths: 1,
+                                onSelect: function (selected) {
+                                    var dt = new Date(selected);
+                                    dt.setDate(dt.getDate() + 1);
+                                    $("#validTo").datepicker("option", "minDate", dt);
+                                }
+                            });
+                            $("#validTo").datepicker({
+                                numberOfMonths: 1,
+                                onSelect: function (selected) {
+                                    var dt = new Date(selected);
+                                    dt.setDate(dt.getDate() - 1);
+                                    $("#validFrom").datepicker("option", "maxDate", dt);
+                                }
+                            });
+                        });
+                        </script>
+
+                    <script>
+                        validFrom.min = new Date().toISOString().split("T")[0];
+                        validTo.min = new Date().toISOString().substr(0,10);
+                        
+                        $('#addCoupon').click(function(){
+                           
+                            var couponName = $("#couponName").val();
+                            var validFrom = $("#validFrom").val();
+                            var validTo = $("#validTo").val();
+                            var discount = $("#discount").val();
+                            var data = {
+                                'csrfmiddlewaretoken':'{{csrf_token}}',
+                                'couponName': couponName,
+                                'validFrom': validFrom,
+                                'validTo' : validTo,
+                                'discount':discount,
+                                
+                            }
+    
+                            console.log(discount)
+                            if (couponName == '' ){
+                                $('#errormsg').html("Enter coupon name")
+                            }
+                            else if(validFrom == '' || validTo == ''){
+                                $('#errormsg').html("select valid date")
+                            }
+                            else if(discount >= 100 || discount <= 0){
+                                $('#errormsg').html("type in percentage")
+                            }
+                            else{
+                                $.ajax({
+                                    url:'/admin1/add_coupon/',
+                                    method : 'POST',
+                                    data : data,
+                                    type: JSON,
+                                    
+                                    success: function(data){
+                                        if (data == 'true'){
+                                          console.log(data)
+                                         // $('#errormsg').html("worked")
+                                          window.location.replace('/admin1/view_coupons/')
+                                        }else if (data == 'false'){
+                                            console.log(data)
+                                            $('#errormsg').html("date in wrong formate")
+                                            // window.location.replace('/admin1/view_coupons/')
+                                          }
+                                    }
+                                })
+                            }
+                        })
+                    </script>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>       <!-- basic form end -->
+{% endblock %}
