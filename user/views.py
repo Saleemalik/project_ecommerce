@@ -53,7 +53,6 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
-            print('hi')
             return JsonResponse('true', safe=False)
 
         else:
@@ -67,7 +66,6 @@ def login(request):
             else:
                 return JsonResponse('false1', safe=False)
     else:
-        print('qwqwq')
         return render(request, 'login.html', {'catgrs': catgrs})
 
 def loginByotp(request):
@@ -88,7 +86,6 @@ def loginByotp(request):
             )
             return JsonResponse('true', safe=False)
         else:
-            print('helop')
             return JsonResponse('false', safe=False)
     else:
         return redirect('login')
@@ -102,13 +99,10 @@ def otpLogin(request):
         user = User.objects.get(id=get_user.id)
         
         global otp
-        print(otp)
         if otp == int(otp_num):
-            print('ht')
             auth.login(request, user)
             return JsonResponse('true', safe=False)
         else:
-            print('he;')
             return JsonResponse('false', safe=False)
     else:
         catgrs = Categories.objects.all()
@@ -125,13 +119,10 @@ def signup(request):
 
         if password1 == password2:
             if User.objects.filter(username=username).exists():
-                print('usrname taken')
                 return JsonResponse('false1', safe=False)
             elif User.objects.filter(email=email).exists():
-                print('email already taken')
                 return JsonResponse('false2', safe=False)
             elif UserPhone.objects.filter(phone=phone).exists():
-                print('Phone number already taken')
                 return JsonResponse('false4', safe=False)
             else:
                 user = User.objects.create_user(username=username, password=password1, email=email)
@@ -158,13 +149,13 @@ def referalSignup(request, idk):
 
         if password1 == password2:
             if User.objects.filter(username=username).exists():
-                print('usrname taken')
+                # print('usrname taken')
                 return JsonResponse('false1', safe=False)
             elif User.objects.filter(email=email).exists():
-                print('email already taken')
+                # print('email already taken')
                 return JsonResponse('false2', safe=False)
             elif UserPhone.objects.filter(phone=phone).exists():
-                print('Phone number already taken')
+                # print('Phone number already taken')
                 return JsonResponse('false4', safe=False)
             else:
                 user = User.objects.create_user(username=username, password=password1, email=email)
@@ -188,9 +179,9 @@ def referalSignup(request, idk):
 
         return JsonResponse('true', safe=False)
     else:
-        print('host:')
-        host = request.get_host()
-        print(host)
+        # print('host:')
+        # host = request.get_host()
+    
         refUser = UserPhone.objects.get(details__id=idk)
         catgrs = Categories.objects.all()
         context = {
@@ -202,7 +193,6 @@ def referalSignup(request, idk):
 
 def userProfile(request):
     if request.user.is_authenticated:
-        print('hi')
         user = request.user.id
 
         address = Address.objects.filter(user=user)
@@ -210,7 +200,6 @@ def userProfile(request):
             adresFst = Address.objects.filter(user=user).first()
         else:
             adresFst = 'add address'
-            print(adresFst)
         cartOrders = Cart.objects.filter(user=user)
         totalItem = 0
         for item in cartOrders:
@@ -251,8 +240,7 @@ def profEdit(request):
         gender = request.POST['gender']
         age = request.POST['age']
         address = request.POST['address']
-        print('asasdsd')
-        print(address)
+        
         email = request.POST['email']
         phone = request.POST['phone']
         userId = request.user.id
@@ -261,10 +249,7 @@ def profEdit(request):
         adres = Address.objects.filter(user=userId).first()
         adres.address = address
         adres.save()
-        # addresId = adres.id
-
-        # adrss = Address.objects.get(id=addresId)
-
+        
         prof.username = Name
         profile.gender = gender
         profile.age = age
@@ -326,8 +311,7 @@ def coupons(request):
             continue
         else:
             unusedCoupons.append(coupon)
-    print('unused:')
-    print(unusedCoupons)
+    
     context = {
         'unusedCoupons':unusedCoupons,
         'totalItem':totalItem
@@ -336,14 +320,12 @@ def coupons(request):
 
 def changePassword(request):
     if request.method == 'POST':
-        print('hello')
         customer = request.user.id
         current_password = request.user.password
         oldpassword = request.POST['oldPassword']
         newPassword = request.POST['newPassword']
         confirmPassword = request.POST['confirmPassword']
         customer = User.objects.get(id=customer)
-        print(customer.password)
         if check_password(oldpassword, current_password) == False:
             return JsonResponse('false1', safe=False)
         elif newPassword == confirmPassword:
@@ -414,15 +396,12 @@ def updateItem(request):
 def change(request, idk):
     if request.method == 'GET':
         qty = request.GET['qty']
-        print('change' + qty)
         cartId = Cart.objects.get(id=idk)
         cartId.quantity = qty
-        print(cartId.quantity)
         cartId.save()
         if int(cartId.quantity) <= 0:
             return JsonResponse('false', safe=False)
-        print('ffk')
-        print(cartId.quantity)
+        
         return JsonResponse('true', safe=False)
 
 def deleteCart(request, idk):
@@ -652,29 +631,18 @@ def success(request):
     return render(request, 'user_side/payment/success.html', context)
 
 def search(request):
-    if request.method == 'POST':
-
-        search_item = request.POST['Product']
-
-        cache.set('searchItem', search_item)
-
-        item = Products.objects.filter(productName__icontains=search_item)        
-        cache.set('item', item)
-
-        return redirect('search')
-
-    else:
-        catgrs = Categories.objects.all()
-        item = cache.get('item')
-
-        searchItem = cache.get('searchItem')
-
-        cache.delete('searchItem')
-        cache.delete('item')
-
+    catgrs = Categories.objects.all()
+    if 'Product' in request.GET:
+        search_item = request.GET['Product']
+        item = Products.objects.filter(productName__icontains=search_item)     
+        searchItem = search_item
         context = {
-            'catgrs':catgrs,
-            'item':item,
-            'searchItem':searchItem 
+        'catgrs':catgrs,
+        'item':item,
+        'searchItem':searchItem 
         }
         return render(request, 'user_side/base/search.html', context)
+    else:
+        return redirect('/')
+
+    

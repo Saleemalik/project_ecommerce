@@ -97,7 +97,7 @@
                         $('#log-button').click(function(){
                             var formData = new FormData();
                             formData.append("names", document.getElementById("names").value);
-                            formData.append("inputGroupFile01", );
+                            formData.append("inputGroupFile01", imgurl);
                             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
                             if (names.value === "" ){

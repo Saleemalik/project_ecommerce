@@ -85,7 +85,6 @@ def adminD(request):
                 prSold.append(prod)
 
         today = date.today()
-        print(today)
         completed_delivers_month = Orders.objects.filter(complete=True, transactionDetails='COD',
                                                          date_delivered__month=today.month)
         completed_orders_month = Orders.objects.filter(complete=True, transactionDetails='UPI',
@@ -96,7 +95,6 @@ def adminD(request):
             monthlyOrders.append(order)
         for order in completed_orders_month:
             monthlyOrders.append(order)
-        print(monthlyOrders)
         monthRevenue = 0
         for order in monthlyOrders:
             monthRevenue += order.amount
@@ -172,7 +170,6 @@ def adminD(request):
 
         context = {
             'prSold': prSold,
-            # 'products': products,
             'totUsers': totUsers,
             'totProducts': totProducts,
             'pending_orders': pending_orders,
@@ -228,12 +225,9 @@ def addProduct(request):
             data1 = ContentFile(base64.b64decode(imgstr1), name=nameP + '.' + ext1)
             data2 = ContentFile(base64.b64decode(imgstr2), name=nameP + '.' + ext2)
             data3 = ContentFile(base64.b64decode(imgstr3), name=nameP + '.' + ext3)
-            print('hi')
             if Products.objects.filter(productName=nameP):
-                print('Prod. exists')
                 return JsonResponse('false1', safe=False)
             else:
-                print(img1)
                 catgry = Categories.objects.get(categoryName=catName)
 
                 addProd = Products.objects.create(productName=nameP, price=price, quantity=Qty, productImg1=data1,
@@ -356,6 +350,7 @@ def updateCategory(request, idk):
         if request.method == 'POST':
             catName = request.POST['names']
             img = request.FILES.get('inputGroupFile01')
+            print(img)
 
             if Categories.objects.filter(categoryName=catName).exclude(id=idk).exists():
                 # messages.info(request, 'Username Taken')
