@@ -31,9 +31,9 @@
         <div class="row">
             <div class="col-xs-12 col-md-12 my-3">
                 <label class="cabinet center-block">from:</label>
-                <input type="date" class="file center-block" id="from" min="2021-03-22"/>
+                <input class="file center-block" type="text" id="from" placeholder="enter from date" name="validFrom" >
                 <label class="cabinet center-block">-To:</label>
-                <input type="date" class="file center-block" id="to" min="2021-03-22" />
+                <input class="file center-block" type="text" id="to" placeholder="enter to date" name="validTo">
                 <label for="search" class="ml-3">>></label> 
                 <button type="button" id="search" class="btn btn-blue ml-3">search</button>
                 <span id="msg" class="ml-3"></span>
@@ -41,15 +41,44 @@
             </div>
             <div class="col-md-12">
                 <label class="cabinet center-block">date:</label>
-                <input type="date" class="item-img1 file center-block" id="date" min="2021-03-22"  />
+                <input type="text" class="file center-block" id="date" min="2021-03-22"  placeholder="enter the date order" />
                 <label for="go_to" class="ml-3">>></label> 
                 <button type="button" id="go_to" class="btn btn-blue ml-3">go to</button>
                 <span id="msg2" class="ml-3"></span>
             </div>
-            <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script type="text/javascript">
+                $(function () {
+                    $.datepicker.setDefaults({
+                        dateFormat: 'yy-mm-dd',
+                        maxDate: new Date().toISOString().split("T")[0]
+                    });
+                    $("#from").datepicker({
+                        numberOfMonths: 1,
+                        onSelect: function (selected) {
+                            var dt = new Date(selected);
+                            dt.setDate(dt.getDate() + 1);
+                            $("#to").datepicker("option", "minDate", dt);
+                            
+                        }
+                    });
+                    $("#to").datepicker({
+                        numberOfMonths: 1,
+                        onSelect: function (selected) {
+                            var dt = new Date(selected);
+                            dt.setDate(dt.getDate() - 1);
+                            $("#from").datepicker("option", "maxDate", dt);
+                            
+                        }
+                    });
+                    $("#date").datepicker({
+                        numberOfMonths: 1,
+                        
+                    });
+                });
+            </script>
             <script>
-                from.max = new Date().toISOString().split("T")[0];
-                to.max = new Date().toISOString().split("T")[0];
+                // from.max = new Date().toISOString().split("T")[0];
+                // to.max = new Date().toISOString().split("T")[0];
                 // document.getElementById("myDate").min = "1999-01-01";
                 $('#search').click(function(){
                             
@@ -89,7 +118,7 @@
                 })
             </script>
             <script>
-                date.max = new Date().toISOString().split("T")[0];
+                
                 $('#go_to').click(function(){
                             
                     var date = $("#date").val();

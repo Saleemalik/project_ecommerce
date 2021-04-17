@@ -1,6 +1,39 @@
 {% extends 'Abase.html' %}
 
 {% block content %}
+<style>
+  label.cabinet {
+      display: block;
+      cursor: pointer;
+    }
+    
+    label.cabinet input.file {
+      position: relative;
+      height: 100%;
+      width: auto;
+      opacity: 0;
+      -moz-opacity: 0;
+      filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+      margin-top: -30px;
+    }
+    
+    #upload-demo {
+      width: 400px;
+      height: 250px;
+      padding-bottom: 25px;
+    }
+    #upload-demo1 {
+      width: 300px;
+      height: 250px;
+      padding-bottom: 25px;
+    }
+    #upload-demo2 {
+      width: 250px;
+      height: 250px;
+      padding-bottom: 25px;
+    }
+    
+</style>
 <div class="col-lg-12 col-ml-12">
     <div class="row">
         <!-- basic form start -->
@@ -14,18 +47,40 @@
 
                         
                         <div class="input-group mb-3">
-                           
-                            <div class="input-group-prepend">
-                                <img id="blah" src="{{catEdit.imageurl}}" style="width: 10rem;" alt="category image" />
-                                    <!-- // Will trigger crop event -->
-                                    <button type="button" id="crop_button">Crop</button> 
-                                    <div id="cropped_result"></div>
+                          <div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="cabinet center-block">
+                                        <figure>
+                                            <img src="" class="catImg img-responsive img-thumbnail" id="itemImgOutput" />
+                                            <figcaption><i class="fa fa-camera"></i></figcaption>
+                                        </figure>
+                                        <input type="file" class="item-img file center-block" name="file_photo" />
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="custom-file">
-                                
-                                <input type="file"  accept="image/*"  name="img" id="inputGroupFile01" onchange="readURL(this);">
-                                <label class="custom-file-label" for="inputGroupFile01">Choose Image</label>
+                            <div class="modal fade" id="cropImagePop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">
+                                            <?=multiLanguage( "Edit Foto" , "Edit Photo" )?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="upload-demo" class="center-block"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" id="cropImageBtn" class="btn btn-primary">Crop</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                            
                         </div>
                         <div class="form-group">
                             <label for="example-text-input" class="col-form-label">Category Name</label>
@@ -37,6 +92,10 @@
                         </div>
                        
                     </form>
+                    <script>
+                      $(".catImg").attr("src", "{{catEdit.imageurl}}");
+                       
+                    </script>
 
                     <script>
                         var imgurl;
@@ -44,7 +103,6 @@
                             if (input.files && input.files[0]) {
                               var reader = new FileReader();
                               reader.onload = function (e) {
-                                  console.log('hellosdd')
                                 $('#blah').attr('src', e.target.result)
                               };
                               reader.readAsDataURL(input.files[0]);
@@ -52,13 +110,13 @@
                             }
                           }
                           function initCropper(){
-                            console.log("Came here")
+                            
                             var image = document.getElementById('blah');
                             var cropper = new Cropper(image, {
                               aspectRatio: 16 / 9,
                               crop: function(e) {
-                                console.log(e.detail.x);
-                                console.log(e.detail.y);
+                                //console.log(e.detail.x);
+                                //console.log(e.detail.y);
                               }
                             });
                           
@@ -95,40 +153,38 @@
                     
                     <script>
                         $('#log-button').click(function(){
-                            var formData = new FormData();
-                            formData.append("names", document.getElementById("names").value);
-                            formData.append("inputGroupFile01", imgurl);
-                            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
-                            if (names.value === "" ){
-                                $('#errormsg').html("Enter category name")
-                            }
-                            else if(inputGroupFile01.value === ""){
-                                $('#errormsg').html("upload image")
-                            }
-                            
-                            else{
-                                $.ajax({
-                                    url:'/admin1/updateCategory/{{catEdit.id}}',
-                                    method : 'POST',
-                                    data : formData,
-                                    cache: false,
-                                    contentType: false,
-                                    processData: false,
-                                    dataType: 'JSON',
-                                    
-                                    success: function(data){
-                                        if (data == 'true'){
-                                          console.log(data)
-                                          window.location.replace('/admin1/categories/')
-                                        }
-                                        else if(data == 'false1'){
-                                            
-                                            $("#errormsg").html("category exists")
-                                        }
-                                    }
-                                })
-                            }
+                          var formData = new FormData();
+                          formData.append("names", document.getElementById("names").value);
+                          formData.append("inputGroupFile01", crop);
+                          formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                          if (names.value === "" ){
+                              $('#errormsg').html("Enter category name")
+                          }
+                          
+                          else{
+                              $.ajax({
+                                  url:'/admin1/updateCategory/{{catEdit.id}}',
+                                  method : 'POST',
+                                  data : formData,
+                                  cache: false,
+                                  contentType: false,
+                                  processData: false,
+                                  dataType: 'JSON',
+                                  
+                                  success: function(data){
+                                      if (data == 'true'){
+                                        console.log(data)
+                                        window.location.replace('/admin1/categories/')
+                                      }
+                                      else if(data == 'false1'){
+                                          
+                                          $("#errormsg").html("category exists")
+                                      }
+                                  }
+                              })
+                          }
                         })
                     </script>
                     

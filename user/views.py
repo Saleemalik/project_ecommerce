@@ -27,6 +27,13 @@ import socket
 def home(request):
     catgrs = Categories.objects.all()
     prods = Products.objects.all()
+    for category in catgrs:
+        if category.categoryOffer:
+            discount = category.categoryDiscount
+            products_ = Products.objects.filter(category=category.id)
+            for product in products_:
+                product.offered_price = product.price - product.price * float(discount) / 100
+                product.save()
     totalItem = 0
     if request.user.is_authenticated:
         customer = request.user.id

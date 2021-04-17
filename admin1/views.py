@@ -234,6 +234,10 @@ def addProduct(request):
                                                   productImg2=data2, productImg3=data3, category=catgry,
                                                   description=desc)
                 addProd.save()
+                if catgry.categoryOffer:
+                    discount = catgry.categoryDiscount
+                    addProd.offered_price = addProd.price - addProd.price * float(discount) / 100
+                    addProd.save()
                 return JsonResponse('true', safe=False)
         else:
             return render(request, 'Admin_management/products/add_product.html', {'catgrs': catgrs})
@@ -246,12 +250,13 @@ def editProd(request, idk):
         if request.method == 'POST':
             nameP = request.POST['nameP']
             catName = request.POST['catName']
-            img1 = request.FILES.get('imgInp1')
-            img2 = request.FILES.get('imgInp2')
-            img3 = request.FILES.get('imgInp3')
+            img1 = request.POST['crop1']
+            img2 = request.POST['crop2']
+            img3 = request.POST['crop3']
             price = request.POST['price']
             desc = request.POST['desc']
             Qty = request.POST['Qty']
+            print(img1)
             if Products.objects.filter(productName=nameP).exclude(id=idk).exists():
                 # messages.info(request, 'Username Taken')
                 return JsonResponse('false1', safe=False)
@@ -262,14 +267,23 @@ def editProd(request, idk):
                 prod.price = price
                 prod.description = desc
                 prod.quantity = Qty
-                if img1 is not None:
-                    prod.productImg1 = img1
+                if img1 != "undefined":
+                    format1, imgstr1 = img1.split(';base64,')
+                    ext1 = format1.split('/')[-1]
+                    data1 = ContentFile(base64.b64decode(imgstr1), name=nameP + '.' + ext1)
+                    prod.productImg1 = data1
 
-                if img2 is not None:
-                    prod.productImg2 = img2
+                if img2 != "undefined":
+                    format2, imgstr2 = img2.split(';base64,')
+                    ext2 = format2.split('/')[-1]
+                    data2 = ContentFile(base64.b64decode(imgstr2), name=nameP + '.' + ext2)
+                    prod.productImg2 = data2
 
-                if img3 is not None:
-                    prod.productImg3 = img3
+                if img3 != "undefined":
+                    format3, imgstr3 = img3.split(';base64,')
+                    ext3 = format3.split('/')[-1]
+                    data3 = ContentFile(base64.b64decode(imgstr3), name=nameP + '.' + ext3)
+                    prod.productImg3 = data3
                 prod.save()
                 return JsonResponse('true', safe=False)
         else:
@@ -349,9 +363,8 @@ def updateCategory(request, idk):
     if request.session.has_key("key"):
         if request.method == 'POST':
             catName = request.POST['names']
-            img = request.FILES.get('inputGroupFile01')
-            print(img)
-
+            img = request.POST['inputGroupFile01']
+            
             if Categories.objects.filter(categoryName=catName).exclude(id=idk).exists():
                 # messages.info(request, 'Username Taken')
                 print('username taken')
@@ -359,8 +372,11 @@ def updateCategory(request, idk):
             else:
                 cat = Categories.objects.get(id=idk)
                 cat.categoryName = catName
-                if img is not None:
-                    cat.categoryPic = img
+                if img != "undefined":
+                    format, imgstr = img.split(';base64,')
+                    ext = format.split('/')[-1]
+                    data = ContentFile(base64.b64decode(imgstr), name=catName + '.' + ext)
+                    cat.categoryPic = data
                 cat.save()
                 return JsonResponse('true', safe=False)
         else:
@@ -570,12 +586,12 @@ def orderStatus(request, idk):
 def reports(request):
     if request.session.has_key("key"):
         if request.method == 'POST':
-            print('dsas')
             from_ = request.POST['from']
             to = request.POST['to']
 
             order_rows = Orders.objects.filter(dateOrdered__range=[from_, to])
 
+            print(order_rows)
             cache.set('order_rows', order_rows)
             # equipment = cache.get('order_rows')
 
@@ -583,9 +599,10 @@ def reports(request):
         else:
             order_rows = cache.get('order_rows')
             print(order_rows)
+            if not order_rows:
+                print('empty')
             if order_rows is None:
                 order_rows = Orders.objects.all()
-                print('dsdsd')
             cache.delete('order_rows')
 
             # print(order_rows)

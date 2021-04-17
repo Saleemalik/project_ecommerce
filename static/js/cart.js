@@ -5,13 +5,13 @@ for (var i = 0; i < updateBtns.length; i++) {
         var productId = this.dataset.product
         var action = this.dataset.action
         console.log('productId:', productId, 'action:', action)
-        alert('item added to cart')
-
+        
         console.log('USER:', customer)
         if (customer === 'AnonymousUser') {
             alert('please login')
         } else {
             updateUserOrder(productId, action)
+
         }
     })
 }
@@ -19,7 +19,7 @@ for (var i = 0; i < updateBtns.length; i++) {
 
 function updateUserOrder(productId, action) {
     console.log('logged in')
-
+    alert('item added to cart')
     var url = '/updateItem/'
 
     fetch(url, {

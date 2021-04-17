@@ -68,7 +68,11 @@
             </div>
             <div class="snipcart-item block">
                 <div class="snipcart-thumb agileinfo_single_right_snipcart">
-                    <h4>{{prodt.price}} </h4>
+                  {% if prodt.category.categoryOffer %}
+                  <h4 class="mt-2">{{prodt.offered_price}} <span>{{prodt.price}}</span></h4>
+                  {% else %}
+                  <h4 class="mt-2">{{prodt.price}}</h4>
+                  {% endif %}
                 </div>
                 <div class="snipcart-details agileinfo_single_right_details">
                     
