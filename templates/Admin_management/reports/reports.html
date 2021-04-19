@@ -30,21 +30,24 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-12 my-3">
-                <label class="cabinet center-block">from:</label>
-                <input class="file center-block" type="text" id="from" placeholder="enter from date" name="validFrom" >
-                <label class="cabinet center-block">-To:</label>
-                <input class="file center-block" type="text" id="to" placeholder="enter to date" name="validTo">
-                <label for="search" class="ml-3">>></label> 
-                <button type="button" id="search" class="btn btn-blue ml-3">search</button>
-                <span id="msg" class="ml-3"></span>
-                
+                <form >
+                    <label class="cabinet center-block">from:</label>
+                    <input class="file center-block" type="text" id="from" placeholder="enter from date" name="validFrom" >
+                    <label class="cabinet center-block">-To:</label>
+                    <input class="file center-block" type="text" id="to" placeholder="enter to date" name="validTo">
+                    <label for="search" class="ml-3">>></label> 
+                    <button type="button" id="search" name="search" class="btn btn-blue ml-3">search</button>
+                    <span id="msg" class="ml-3"></span>
+                </form>
             </div>
             <div class="col-md-12">
-                <label class="cabinet center-block">date:</label>
-                <input type="text" class="file center-block" id="date" min="2021-03-22"  placeholder="enter the date order" />
-                <label for="go_to" class="ml-3">>></label> 
-                <button type="button" id="go_to" class="btn btn-blue ml-3">go to</button>
-                <span id="msg2" class="ml-3"></span>
+                <form >
+                    <label class="cabinet center-block">date:</label>
+                    <input type="text" class="file center-block" id="date" min="2021-03-22"  placeholder="enter the date order" />
+                    <label for="go_to" class="ml-3">>></label> 
+                    <button type="button" id="go_to" name="go_to" class="btn btn-blue ml-3">go to</button>
+                    <span id="msg2" class="ml-3"></span>
+                </form>
             </div>
             <script type="text/javascript">
                 $(function () {
@@ -100,20 +103,8 @@
                     }
                     
                     else{
-                        $.ajax({
-                            url:'/admin1/reports/',
-                            method : 'POST',
-                            data : data,
-                            type : 'json',
-                            
-                            success: function(data){
-                                if (data == 'true'){
-                                  console.log(data)
-                                  window.location.replace('/admin1/reports/')
-                                }
-                                
-                            }
-                        })
+                        var t = $(this).attr('id');
+                        window.location.replace('/admin1/reports/'+ t +"?from="+ from+ "&to="+ to )
                     }
                 })
             </script>
@@ -130,20 +121,8 @@
                         $('#msg2').html("select date")
                     }                   
                     else{
-                        $.ajax({
-                            url:'/admin1/report2/',
-                            method : 'POST',
-                            data : data,
-                            type : 'json',
-                            
-                            success: function(data){
-                                if (data == 'true'){
-                                  console.log(data)
-                                  window.location.replace('/admin1/reports/')
-                                }
-                                
-                            }
-                        })
+                        var t = $(this).attr('id');
+                        window.location.replace('/admin1/reports/'+ t +"?date="+ date)
                     }
                 })
             </script>

@@ -52,12 +52,9 @@ def adminD(request):
         compltdOrder = Orders.objects.filter(complete=True)
         totRevenue = 0
         for order in compltdOrder:
-            orderId = order.id
-            prods = ViewOrder.objects.filter(orderId=orderId)
-            gr_total = 0
-            for product in prods:
-                gr_total += product.total
-            totRevenue += gr_total + 50
+            totRevenue += order.amount
+            
+            
 
         producs = Products.objects.all()
         
@@ -583,52 +580,27 @@ def orderStatus(request, idk):
     # return redirect('orders')
 
 
-def reports(request):
+def reports(request, idk):
     if request.session.has_key("key"):
-        if request.method == 'POST':
-            from_ = request.POST['from']
-            to = request.POST['to']
+        order_rows = None
 
+        if idk == 'search':
+            from_ = request.GET['from']
+            to = request.GET['to']
             order_rows = Orders.objects.filter(dateOrdered__range=[from_, to])
 
-            print(order_rows)
-            cache.set('order_rows', order_rows)
-            # equipment = cache.get('order_rows')
-
-            return JsonResponse('true', safe=False)
-        else:
-            order_rows = cache.get('order_rows')
-            print(order_rows)
-            if not order_rows:
-                print('empty')
-            if order_rows is None:
-                order_rows = Orders.objects.all()
-            cache.delete('order_rows')
-
-            # print(order_rows)
-
-            context = {
-                'order_rows': order_rows
-            }
-            return render(request, 'Admin_management/reports/reports.html', context)
-    else:
-        return redirect('Alogin')
-
-
-def reports2(request):
-    if request.session.has_key("key"):
-        if request.method == 'POST':
-            date_ = request.POST['date']
-
+        if idk == 'go_to':
+            date_ = request.GET['date']
+            print(date_)
             order_rows = Orders.objects.filter(dateOrdered__date=date_)
-            print('asaq')
-            print(order_rows)
 
-            cache.set('order_rows', order_rows)
-            # equipment = cache.get('order_rows')
-
-            return JsonResponse('true', safe=False)
-        else:
-            return redirect('reports')
+        if order_rows is None:
+            order_rows = Orders.objects.all()
+        
+        context = {
+            'order_rows': order_rows
+        }
+        return render(request, 'Admin_management/reports/reports.html', context)
     else:
         return redirect('Alogin')
+
