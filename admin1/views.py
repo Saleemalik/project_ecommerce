@@ -580,16 +580,16 @@ def orderStatus(request, idk):
     # return redirect('orders')
 
 
-def reports(request, idk):
+def reports(request):
     if request.session.has_key("key"):
         order_rows = None
 
-        if idk == 'search':
+        if 'from' and 'to' in request.GET:
             from_ = request.GET['from']
             to = request.GET['to']
-            order_rows = Orders.objects.filter(dateOrdered__range=[from_, to])
+            order_rows = Orders.objects.filter(dateOrdered__range=[from_, to ])
 
-        if idk == 'go_to':
+        if 'date' in request.GET:
             date_ = request.GET['date']
             print(date_)
             order_rows = Orders.objects.filter(dateOrdered__date=date_)

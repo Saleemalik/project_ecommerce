@@ -32,9 +32,9 @@
             <div class="col-xs-12 col-md-12 my-3">
                 <form >
                     <label class="cabinet center-block">from:</label>
-                    <input class="file center-block" type="text" id="from" placeholder="enter from date" name="validFrom" >
+                    <input class="file center-block" type="date" id="from" onchange="from_(event)" name="validFrom" >
                     <label class="cabinet center-block">-To:</label>
-                    <input class="file center-block" type="text" id="to" placeholder="enter to date" name="validTo">
+                    <input class="file center-block" type="date" id="to" onchange="to_(event)" name="validTo">
                     <label for="search" class="ml-3">>></label> 
                     <button type="button" id="search" name="search" class="btn btn-blue ml-3">search</button>
                     <span id="msg" class="ml-3"></span>
@@ -43,45 +43,25 @@
             <div class="col-md-12">
                 <form >
                     <label class="cabinet center-block">date:</label>
-                    <input type="text" class="file center-block" id="date" min="2021-03-22"  placeholder="enter the date order" />
+                    <input type="date" class="file center-block" id="date"   placeholder="enter the date order" />
                     <label for="go_to" class="ml-3">>></label> 
                     <button type="button" id="go_to" name="go_to" class="btn btn-blue ml-3">go to</button>
                     <span id="msg2" class="ml-3"></span>
                 </form>
             </div>
-            <script type="text/javascript">
-                $(function () {
-                    $.datepicker.setDefaults({
-                        dateFormat: 'yy-mm-dd',
-                        maxDate: new Date().toISOString().split("T")[0]
-                    });
-                    $("#from").datepicker({
-                        numberOfMonths: 1,
-                        onSelect: function (selected) {
-                            var dt = new Date(selected);
-                            dt.setDate(dt.getDate() + 1);
-                            $("#to").datepicker("option", "minDate", dt);
-                            
-                        }
-                    });
-                    $("#to").datepicker({
-                        numberOfMonths: 1,
-                        onSelect: function (selected) {
-                            var dt = new Date(selected);
-                            dt.setDate(dt.getDate() - 1);
-                            $("#from").datepicker("option", "maxDate", dt);
-                            
-                        }
-                    });
-                    $("#date").datepicker({
-                        numberOfMonths: 1,
-                        
-                    });
-                });
-            </script>
+            
             <script>
-                // from.max = new Date().toISOString().split("T")[0];
-                // to.max = new Date().toISOString().split("T")[0];
+                from.max = new Date().toISOString().split("T")[0];
+                to.max = new Date().toISOString().split("T")[0];
+                date.max = new Date().toISOString().split("T")[0];
+                function from_(event){
+                    var start_date = event.target.value
+                    document.getElementById("to").min = start_date
+                }
+                function to_(event){
+                    var end_date = event.target.value
+                    document.getElementById("from").max = end_date
+                }
                 // document.getElementById("myDate").min = "1999-01-01";
                 $('#search').click(function(){
                             
@@ -104,7 +84,7 @@
                     
                     else{
                         var t = $(this).attr('id');
-                        window.location.replace('/admin1/reports/'+ t +"?from="+ from+ "&to="+ to )
+                        window.location.replace('/admin1/reports/'+"?from="+ from+ "&to="+ to )
                     }
                 })
             </script>
@@ -122,7 +102,7 @@
                     }                   
                     else{
                         var t = $(this).attr('id');
-                        window.location.replace('/admin1/reports/'+ t +"?date="+ date)
+                        window.location.replace('/admin1/reports/'+"?date="+ date)
                     }
                 })
             </script>

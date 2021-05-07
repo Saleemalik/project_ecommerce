@@ -27,5 +27,5 @@ urlpatterns = [
     path('orders/', views.orders, name= 'orders'),
     path('viewOrder/<int:idk>', views.viewOrder, name='viewOrder'),
     path('order_status/<int:idk>', views.orderStatus, name='orderStatus'),
-    path('reports/<str:idk>', views.reports, name='reports'),
+    path('reports/', views.reports, name='reports'),
 ]
