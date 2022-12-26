@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '+*l6*nqy(c+o0z$xo)79jkc75ju%@2@0vz2343p)kdg^y(7+re'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -80,9 +80,9 @@ WSGI_APPLICATION = 'eCommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb2',
-        'USER': 'saleemalik',
-        'PASSWORD': '1234',
+        'NAME': 'usermalik',
+        'USER': 'postgres',
+        'PASSWORD': 'malikPostgres',
         'HOST': 'localhost',
         'PORT':'5432'
     }
@@ -125,7 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
